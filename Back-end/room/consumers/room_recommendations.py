@@ -14,8 +14,9 @@ class ChatRecommendationConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user = self.scope["user"]
-        self.room = await get_room(self.room_name)
-        self.room_group_name = 'recommendations_%s' % self.room_name
+        # self.room = await get_room(self.room_name)
+        # self.room_group_name = 'recommendations_%s' % self.room_name
+        self.room_group_name = 'recommendations'
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -40,8 +41,8 @@ class ChatRecommendationConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json(event)
 
     async def send_room_recommendations(self, event):
-        text = event["message"]
-        data = await get_room_recommendations(text)
+        data = event["message"]
+        # data = await get_room_recommendations(text)
         await self.send_json(data)
 
 

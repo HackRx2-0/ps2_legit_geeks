@@ -1,9 +1,8 @@
 import 'dart:io';
+import 'package:http/http.dart';
 import 'package:store_app/provider/getit.dart';
 import 'package:store_app/services/prefs_services.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-
 import 'api-response.dart';
 import 'http_exception.dart';
 import 'package:http/http.dart' as http;

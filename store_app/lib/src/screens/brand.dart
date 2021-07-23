@@ -7,7 +7,6 @@ import '../models/route_argument.dart';
 import '../widgets/BrandHomeTabWidget.dart';
 import '../widgets/DrawerWidget.dart';
 import '../widgets/ProductsByBrandWidget.dart';
-import '../widgets/ReviewsListWidget.dart';
 import '../widgets/ShoppingCartButtonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

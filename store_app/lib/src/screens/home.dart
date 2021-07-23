@@ -1,12 +1,6 @@
-import 'package:get_it/get_it.dart';
-import 'package:store_app/enum/view_state.dart';
 import 'package:store_app/provider/base_view.dart';
 import 'package:store_app/view/home_viewmodel.dart';
-
 import '../../config/ui_icons.dart';
-import '../models/brand.dart';
-import '../../provider/getit.dart';
-import '../models/category.dart';
 import '../models/product.dart';
 import '../widgets/BrandsIconsCarouselWidget.dart';
 import '../widgets/CategoriesIconsCarouselWidget.dart';

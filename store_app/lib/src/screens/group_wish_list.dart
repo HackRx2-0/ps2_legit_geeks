@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/config/ui_icons.dart';
+import 'package:store_app/provider/base_view.dart';
 import 'package:store_app/src/screens/group_cart_page.dart';
 import 'package:store_app/src/screens/favorites.dart';
 import 'package:store_app/src/screens/group_info.dart';
 import 'package:store_app/src/screens/groups_favorite.dart';
+import 'package:store_app/view/group_wishlist_viewmodel.dart';
 
 import 'cart.dart';
 
@@ -32,13 +34,17 @@ class _GroupWishListState extends State<GroupWishList> {
           appBarActions(),
         ],
       ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 15.0,
-          ),
-          GroupFavoritesWidget(),
-        ],
+      body: BaseView<GroupWishlistViewmodel>(
+        builder: (ctx, model, child) {
+          return ListView(
+            children: [
+              SizedBox(
+                height: 15.0,
+              ),
+              GroupFavoritesWidget(),
+            ],
+          );
+        },
       ),
     );
   }

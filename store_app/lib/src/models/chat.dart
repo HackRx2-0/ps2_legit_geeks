@@ -21,14 +21,3 @@ class Chat {
             userState: UserState.available);
   }
 }
-
-//class ChatList{
-//  List<Chat> _list;
-//
-//  ChatList(){
-//    _list = [
-//      new Chat('Ok', '32 ago')
-//      new Chat('Ok', '32 ago')
-//    ];
-//  }
-//}

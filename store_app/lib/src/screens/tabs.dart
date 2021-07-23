@@ -1,7 +1,5 @@
 import 'package:store_app/services/notification_service.dart';
-import 'package:store_app/src/screens/chatbotscreen.dart';
-
-import '../../config/ui_icons.dart';
+import 'package:store_app/src/widgets/FilterWidget.dart';
 import '../screens/account.dart';
 import '../screens/chat.dart';
 import '../screens/favorites.dart';
@@ -9,16 +7,15 @@ import '../screens/home.dart';
 import '../screens/messages.dart';
 import '../screens/notifications.dart';
 import '../widgets/DrawerWidget.dart';
-import '../widgets/FilterWidget.dart';
 import '../widgets/ShoppingCartButtonWidget.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class TabsWidget extends StatefulWidget {
-  int currentTab = 2;
-  int selectedTab = 2;
-  String currentTitle = 'Home';
-  Widget currentPage = HomeWidget();
+  int currentTab = 3;
+  int selectedTab = 3;
+  String currentTitle = 'Store App';
+  Widget currentPage = MessagesWidget();
 
   TabsWidget({
     Key key,
@@ -95,144 +92,35 @@ class _TabsWidgetState extends State<TabsWidget> {
       endDrawer: FilterWidget(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-//        leading: new IconButton(
-//          icon: new Icon(UiIcons.return_icon, color: Theme.of(context).hintColor),
-//          onPressed: () => Navigator.of(context).pop(),
-//        ),
-        leading: new IconButton(
-          icon: new Icon(Icons.sort, color: Theme.of(context).hintColor),
-          onPressed: () => _scaffoldKey.currentState.openDrawer(),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          widget.currentTitle,
-          style: Theme.of(context).textTheme.display1,
-        ),
-        actions: <Widget>[
-          new ShoppingCartButtonWidget(
-              iconColor: Theme.of(context).hintColor,
-              labelColor: Theme.of(context).accentColor),
-          Container(
-              width: 30,
-              height: 30,
-              margin: EdgeInsets.only(top: 12.5, bottom: 12.5, right: 20),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(300),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/Tabs', arguments: 4);
-                },
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('img/user2.jpg'),
-                ),
-              )),
-        ],
       ),
-      body: widget.currentPage,
-//      bottomNavigationBar: CurvedNavigationBar(
-//        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//        buttonBackgroundColor: Theme.of(context).accentColor,
-//        color: Theme.of(context).focusColor.withOpacity(0.2),
-//        height: 60,
-//        index: widget.selectedTab,
-//        onTap: (int i) {
-//          this._selectTab(i);
-//        },
-//        items: <Widget>[
-//          Icon(
-//            UiIcons.bell,
-//            size: 23,
-//            color: Theme.of(context).focusColor,
-//          ),
-//          Icon(
-//            UiIcons.user_1,
-//            size: 23,
-//            color: Theme.of(context).focusColor,
-//          ),
-//          Icon(
-//            UiIcons.home,
-//            size: 23,
-//            color: Theme.of(context).focusColor,
-//          ),
-//          Icon(
-//            UiIcons.chat,
-//            size: 23,
-//            color: Theme.of(context).focusColor,
-//          ),
-//          Icon(
-//            UiIcons.heart,
-//            size: 23,
-//            color: Theme.of(context).focusColor,
-//          ),
-//        ],
-//      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).accentColor,
-        selectedFontSize: 0,
-        unselectedFontSize: 0,
-        iconSize: 22,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        selectedIconTheme: IconThemeData(size: 25),
-        unselectedItemColor: Theme.of(context).hintColor.withOpacity(1),
-        currentIndex: widget.selectedTab,
-        onTap: (int i) {
-          this._selectTab(i);
-        },
-        // this will be set when a new tab is tapped
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(UiIcons.bell),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UiIcons.heart),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-              title: new Container(height: 5.0),
-              icon: Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Theme.of(context).accentColor.withOpacity(0.4),
-                        blurRadius: 40,
-                        offset: Offset(0, 15)),
-                    BoxShadow(
-                        color: Theme.of(context).accentColor.withOpacity(0.4),
-                        blurRadius: 13,
-                        offset: Offset(0, 3))
-                  ],
-                ),
-                child: new Icon(UiIcons.home,
-                    color: Theme.of(context).primaryColor),
-              )),
-          BottomNavigationBarItem(
-            icon: new Icon(UiIcons.chat),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(UiIcons.user_1),
-            title: new Container(height: 0.0),
-          ),
-        ],
+      leading: new IconButton(
+        icon: new Icon(Icons.sort, color: Theme.of(context).hintColor),
+        onPressed: () => _scaffoldKey.currentState.openDrawer(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.asset('img/chatbot.jpg')),
-        onPressed: () {
-          Navigator.of(context).pushNamed(ChatBot.routeName);
-        },
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(
+        widget.currentTitle,
+        style: Theme.of(context).textTheme.display1,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+      actions: <Widget>[
+        new ShoppingCartButtonWidget(
+            iconColor: Theme.of(context).hintColor,
+            labelColor: Theme.of(context).accentColor),
+        Container(
+            width: 30,
+            height: 30,
+            margin: EdgeInsets.only(top: 12.5, bottom: 12.5, right: 20),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(300),
+              onTap: () {
+                Navigator.of(context).pushNamed('/Tabs', arguments: 4);
+              },
+              child: CircleAvatar(
+                backgroundImage: AssetImage('img/user2.jpg'),
+              ),
+            )),
+      ],
     );
   }
 }

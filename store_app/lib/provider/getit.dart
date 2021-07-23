@@ -1,4 +1,3 @@
-import 'package:http/http.dart';
 import 'package:store_app/services/api_services.dart';
 import 'package:store_app/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';

@@ -1,6 +1,6 @@
 import '../../config/ui_icons.dart';
 import '../models/brand.dart';
-import '../models/product.dart' as prod;
+import '../models/product.dart';
 import '../widgets/FavoriteListItemWidget.dart';
 import '../widgets/ProductGridItemWidget.dart';
 import '../widgets/SearchBarWidget.dart';
@@ -108,7 +108,7 @@ class _ProductsByBrandWidgetState extends State<ProductsByBrandWidget> {
               crossAxisCount: 4,
               itemCount: widget.brand.products.length,
               itemBuilder: (BuildContext context, int index) {
-                prod.Product product = widget.brand.products.elementAt(index);
+                Product product = widget.brand.products.elementAt(index);
                 return ProductGridItemWidget(
                   product: product,
                   heroTag: 'products_by_category_grid',

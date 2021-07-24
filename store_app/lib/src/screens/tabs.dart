@@ -1,7 +1,5 @@
 import 'package:store_app/services/notification_service.dart';
-import 'package:store_app/src/screens/chatbotscreen.dart';
-
-import '../../config/ui_icons.dart';
+import 'package:store_app/src/widgets/FilterWidget.dart';
 import '../screens/account.dart';
 import '../screens/chat.dart';
 import '../screens/favorites.dart';
@@ -9,7 +7,6 @@ import '../screens/home.dart';
 import '../screens/messages.dart';
 import '../screens/notifications.dart';
 import '../widgets/DrawerWidget.dart';
-import '../widgets/FilterWidget.dart';
 import '../widgets/ShoppingCartButtonWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -95,38 +92,6 @@ class _TabsWidgetState extends State<TabsWidget> {
       endDrawer: FilterWidget(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-//        leading: new IconButton(
-//          icon: new Icon(UiIcons.return_icon, color: Theme.of(context).hintColor),
-//          onPressed: () => Navigator.of(context).pop(),
-//        ),
-        leading: new IconButton(
-          icon: new Icon(Icons.sort, color: Theme.of(context).hintColor),
-          onPressed: () => _scaffoldKey.currentState.openDrawer(),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          widget.currentTitle,
-          style: Theme.of(context).textTheme.display1,
-        ),
-        actions: <Widget>[
-          new ShoppingCartButtonWidget(
-              iconColor: Theme.of(context).hintColor,
-              labelColor: Theme.of(context).accentColor),
-          Container(
-              width: 30,
-              height: 30,
-              margin: EdgeInsets.only(top: 12.5, bottom: 12.5, right: 20),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(300),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/Tabs', arguments: 4);
-                },
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('img/user2.jpg'),
-                ),
-              )),
-        ],
       ),
       body: MessagesWidget(),
 //      bottomNavigationBar: CurvedNavigationBar(

@@ -22,7 +22,6 @@ class GroupFavoriteListItemWidget extends StatefulWidget {
 
 class _GroupFavoriteListItemWidgetState
     extends State<GroupFavoriteListItemWidget> {
-  var random = 1 + Random().nextInt(9);
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -141,7 +140,7 @@ class _GroupFavoriteListItemWidgetState
                               IconButton(
                                   icon: Icon(Icons.arrow_upward_rounded),
                                   onPressed: () {}),
-                              Text('$random Upvotes')
+                              Text('8 Upvotes')
                             ],
                           ),
                         )

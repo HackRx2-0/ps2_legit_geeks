@@ -16,7 +16,8 @@ class User {
 
   User.init();
 
-  User.basic({this.firstName, this.lastName, this.avatar, this.userState});
+  User.basic(
+      {this.firstName, this.lastName, this.avatar, this.userState, this.id});
 
   User.advanced(
       {this.firstName,

@@ -1,8 +1,11 @@
+import 'package:store_app/enum/view_state.dart';
+import 'package:store_app/provider/base_view.dart';
 import 'package:store_app/src/screens/nearby.dart';
+import 'package:store_app/src/widgets/groupMessageItem.dart';
+import 'package:store_app/view/groupChatViewModel.dart';
 
 import '../models/conversation.dart' as model;
 import '../widgets/EmptyMessagesWidget.dart';
-import '../widgets/MessageItemWidget.dart';
 import '../widgets/SearchBarWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +43,29 @@ class _MessagesWidgetState extends State<MessagesWidget>
     });
     super.initState();
   }
+
+  List<Map<dynamic, dynamic>> contactList = [
+    {
+      "name": "Saksham Mittal",
+      "image": "img/temp/Rahul.jpeg",
+    },
+    {
+      "name": "Raghav Shukla",
+      "image": "img/temp/Raghav.jpeg",
+    },
+    {
+      "name": "Ayush Mahajan",
+      "image": "img/temp/Vinay.jpeg",
+    },
+    {
+      "name": "Shivam Joshi",
+      "image": "img/temp/yuvansh.jpeg",
+    },
+    {
+      "name": "Rahul Dev",
+      "image": "img/temp/Rahul.jpeg",
+    },
+  ];
 
   Icon newGroup = Icon(Icons.add, size: 23.0, color: Colors.white);
   Container invite = Container(
@@ -149,29 +175,87 @@ class _MessagesWidgetState extends State<MessagesWidget>
                 ),
               topNavigator4
                   ? Nearby()
-                  : Offstage(
-                      offstage: _conversationList.conversations.isEmpty,
-                      child: ListView.separated(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: _conversationList.conversations.length,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: 7);
-                        },
-                        itemBuilder: (context, index) {
-                          return MessageItemWidget(
-                            message: _conversationList.conversations
-                                .elementAt(index),
-                            onDismissed: (conversation) {
-                              setState(() {
-                                _conversationList.conversations.removeAt(index);
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ),
+                  : topNavigator3
+                      ? ListView.separated(
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: contactList.length,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 7);
+                          },
+                          itemBuilder: (context, index) {
+                            var person = contactList[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25.0, vertical: 10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Stack(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              contactList[index]["image"]),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 35),
+                                  Text(
+                                    contactList[index]["name"],
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : BaseView<GroupChatViewModel>(
+                          onModelReady: (model) => model.getGroupChat(context),
+                          builder: (ctx, model, child) => model.state ==
+                                  ViewState.Busy
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 150.0,
+                                  ),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : Offstage(
+                                  offstage: model.groupConversations.isEmpty,
+                                  child: ListView.separated(
+                                    padding: EdgeInsets.symmetric(vertical: 15),
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemCount: model.groupConversations.length,
+                                    separatorBuilder: (context, index) {
+                                      return SizedBox(height: 7);
+                                    },
+                                    itemBuilder: (context, index) {
+                                      var conversation =
+                                          model.groupConversations[index];
+
+                                      return GroupMessageItemWidget(
+                                        message: conversation,
+                                        onDismissed: (conversation) {
+                                          setState(() {
+                                            model.groupConversations
+                                                .removeAt(index);
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                        ),
               Offstage(
                 offstage: _conversationList.conversations.isNotEmpty,
                 child: EmptyMessagesWidget(),

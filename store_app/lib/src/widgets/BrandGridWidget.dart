@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '../models/brand.dart';
 import '../models/route_argument.dart';
 import 'package:flutter/material.dart';
@@ -40,29 +42,33 @@ class BrandGridWidget extends StatelessWidget {
                 width: double.infinity,
                 height: 100,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Theme.of(context).hintColor.withOpacity(0.10),
-                        offset: Offset(0, 4),
-                        blurRadius: 10)
-                  ],
-                  // gradient: LinearGradient(
-                  //     begin: Alignment.bottomLeft,
-                  //     end: Alignment.topRight,
-                  //     colors: [
-                  //       brand.color,
-                  //       brand.color.withOpacity(0.2),
-                  //     ])
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Theme.of(context).hintColor.withOpacity(0.10),
+                          offset: Offset(0, 4),
+                          blurRadius: 10)
+                    ],
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        colors: [
+                          brand.color,
+                          brand.color.withOpacity(0.2),
+                        ])),
+                child: Hero(
+                  tag: brand.id,
+                  child: CachedNetworkImage(
+                    imageUrl: brand.image,
+                    width: 80,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  // SvgPicture.asset(
+                  //   brand.logo,
+                  //   color: Theme.of(context).primaryColor,
+                  //   width: 80,
+                  // ),
                 ),
-                // child: Hero(
-                //   tag: brand.id,
-                //   child: SvgPicture.asset(
-                //     brand.logo,
-                //     color: Theme.of(context).primaryColor,
-                //     width: 80,
-                //   ),
-                // ),
               ),
               Positioned(
                 right: -50,
@@ -129,7 +135,7 @@ class BrandGridWidget extends StatelessWidget {
                           size: 18,
                         ),
                         Text(
-                          brand.rate.toString(),
+                          brand.averageRating.toStringAsFixed(2),
                           style: Theme.of(context).textTheme.body2,
                         )
                       ],

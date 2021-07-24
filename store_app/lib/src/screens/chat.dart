@@ -1,10 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
+// import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/cx/v3beta1/session.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:store_app/config/app_config.dart' as cfg;
 import 'package:store_app/enum/view_state.dart';
 import 'package:store_app/provider/base_view.dart';
+
 import 'package:store_app/src/models/product.dart';
+import 'package:store_app/src/models/route_argument.dart';
 import 'package:store_app/src/screens/group_cart_page.dart';
 import 'package:store_app/src/screens/group_info.dart';
 import 'package:store_app/src/screens/group_wish_list.dart';
@@ -20,6 +26,9 @@ import '../widgets/ChatMessageListItemWidget.dart';
 import 'package:flutter/material.dart';
 
 class ChatWidget extends StatefulWidget {
+  RouteArgument routeArgument;
+  ChatWidget({this.routeArgument});
+
   @override
   _ChatWidgetState createState() => _ChatWidgetState();
 }
@@ -32,7 +41,6 @@ class _ChatWidgetState extends State<ChatWidget> {
   final config = cfg.Colors();
 
   var labelCount = 0;
-  ProductsList _productsList = new ProductsList();
 
   @override
   Widget build(BuildContext context) {
@@ -70,40 +78,54 @@ class _ChatWidgetState extends State<ChatWidget> {
                       Expanded(
                         child: StreamBuilder(
                           stream: model.socket.stream,
-                          // initialData: model.initialData,
+                          initialData: model.initialData,
                           builder: (ctx, snapshot) {
-                            print('welcome to chats:');
-                            print(snapshot.data);
                             if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
+                              print('no data');
+                              return Container();
+                            } else {
+                              if (snapshot.data is List) {
+                                for (var x in snapshot.data) {
+                                  if (x is Map) {
+                                    print('yes');
+                                  }
+                                  // final data = jsonDecode(x.toString())
+                                  //     as Map<String, dynamic>;
+
+                                  final chat = Chat.fromJson(x);
+                                  _conversationList.conversations[0].chats
+                                      .insert(0, chat);
+                                }
+                              } else {
+                                final data =
+                                    jsonDecode(snapshot.data.toString())
+                                        as Map<String, dynamic>;
+
+                                final chat = Chat.fromJson(data);
+                                _conversationList.conversations[0].chats
+                                    .insert(0, chat);
+                                _myListKey.currentState.insertItem(0);
+                              }
+                              print('welcome to chats:');
+                              print(snapshot.data);
+                              return AnimatedList(
+                                key: _myListKey,
+                                reverse: true,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 20),
+                                initialItemCount: _conversationList
+                                    .conversations[0].chats.length,
+                                itemBuilder: (context, index,
+                                    Animation<double> animation) {
+                                  Chat chat = _conversationList
+                                      .conversations[0].chats[index];
+                                  return ChatMessageListItem(
+                                    chat: chat,
+                                    animation: animation,
+                                  );
+                                },
                               );
                             }
-                            final data = jsonDecode(snapshot.data.toString())
-                                as Map<String, dynamic>;
-
-                            final chat = Chat.fromJson(data);
-                            _conversationList.conversations[0].chats
-                                .insert(0, chat);
-                            _myListKey.currentState.insertItem(0);
-                            print(_conversationList.conversations[0].chats);
-                            return AnimatedList(
-                              key: _myListKey,
-                              reverse: true,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              initialItemCount: _conversationList
-                                  .conversations[0].chats.length,
-                              itemBuilder: (context, index,
-                                  Animation<double> animation) {
-                                Chat chat = _conversationList
-                                    .conversations[0].chats[index];
-                                return ChatMessageListItem(
-                                  chat: chat,
-                                  animation: animation,
-                                );
-                              },
-                            );
                           },
                         ),
                       ),
@@ -132,11 +154,21 @@ class _ChatWidgetState extends State<ChatWidget> {
                               padding: EdgeInsets.only(right: 30),
                               onPressed: () async {
                                 // setState(() {
+                                try {
+                                  DetectIntentResponse data2 =
+                                      await model.dialogflow.detectIntent(
+                                          model.myController.text, 'en-US');
+                                  print(data2.queryResult.fulfillmentText);
+                                } catch (e) {
+                                  print('error: ' + e.toString());
+                                }
+
                                 final data = jsonEncode({
                                   "room": 10,
                                   "user": 1,
                                   "message_text": model.myController.text
                                 });
+
                                 model.socket.sink.add(data);
                                 model.myController.clear();
                                 // });
@@ -180,7 +212,25 @@ class _ChatWidgetState extends State<ChatWidget> {
                       height: 250,
                       // width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: PopupProductsWidget(),
+                      child: StreamBuilder(
+                          stream: model.recommendationSocket.stream,
+                          builder: (ctx, snapshot) {
+                            List<Product> _products = [];
+                            print('welcome to recommendation');
+                            print(snapshot.data);
+                            if (snapshot.data != null) {
+                              final json = jsonDecode(snapshot.data);
+                              _products = [];
+                              for (var data in json) {
+                                final product = Product.fromJson(data);
+                                _products.add(product);
+                              }
+                            }
+
+                            return _products.isEmpty
+                                ? Container()
+                                : PopupProductsWidget(products: _products);
+                          }),
                     ),
                   ),
                 ]);
@@ -192,7 +242,10 @@ class _ChatWidgetState extends State<ChatWidget> {
   appBarTitle() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => GroupInfo()));
+        Navigator.pushNamed(context, GroupInfo.routeName,
+            arguments: RouteArgument(
+              id: widget.routeArgument.argumentsList[0].id,
+            ));
       },
       child: Row(
         children: [
@@ -200,13 +253,18 @@ class _ChatWidgetState extends State<ChatWidget> {
               width: 35,
               height: 35,
               margin: EdgeInsets.only(top: 7, bottom: 7, right: 10),
+              decoration: BoxDecoration(shape: BoxShape.circle),
               child: InkWell(
                 borderRadius: BorderRadius.circular(300),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/Tabs', arguments: 1);
-                },
+                // onTap: () {
+                //   Navigator.of(context).pushNamed('/Tabs', arguments: 1);
+                // },
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('img/temp/group_icon.jpeg'),
+                  radius: 20,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.routeArgument.argumentsList[0].image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               )),
           Container(
@@ -215,7 +273,7 @@ class _ChatWidgetState extends State<ChatWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Delhi Wholesalers",
+                  widget.routeArgument.argumentsList[0].title,
                   style: Theme.of(context).textTheme.body2,
                   overflow: TextOverflow.ellipsis,
                 ),

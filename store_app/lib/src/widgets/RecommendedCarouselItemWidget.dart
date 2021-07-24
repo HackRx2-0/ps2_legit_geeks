@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:store_app/config/ui_icons.dart';
 
 import '../models/product.dart';
@@ -36,17 +37,17 @@ class RecommendedCarouselItemWidget extends StatelessWidget {
                 height: 120,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(product.image),
-                  ),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: product.image,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 90),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              width: 120,
+              width: 130,
               height: 72,
               decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
@@ -71,19 +72,21 @@ class RecommendedCarouselItemWidget extends StatelessWidget {
                     children: <Widget>[
                       // The title of the product
                       Text(
-                        '89.00',
-                        // product.getPrice(),
-
+                        product.getPrice(),
                         style: Theme.of(context).textTheme.body2,
                       ),
-
+                      SizedBox(
+                        width: 8,
+                      ),
                       Icon(
                         Icons.star,
                         color: Colors.amber,
                         size: 18,
                       ),
                       Text(
-                        product.rate.toString(),
+                        product.averageRating == null
+                            ? '3.5'
+                            : product.averageRating.toStringAsFixed(1),
                         style: Theme.of(context).textTheme.body2,
                       )
                     ],

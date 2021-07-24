@@ -15,10 +15,10 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class TabsWidget extends StatefulWidget {
-  int currentTab = 2;
-  int selectedTab = 2;
-  String currentTitle = 'Home';
-  Widget currentPage = HomeWidget();
+  int currentTab = 3;
+  int selectedTab = 3;
+  String currentTitle = 'Store App';
+  Widget currentPage = MessagesWidget();
 
   TabsWidget({
     Key key,
@@ -128,7 +128,7 @@ class _TabsWidgetState extends State<TabsWidget> {
               )),
         ],
       ),
-      body: widget.currentPage,
+      body: MessagesWidget(),
 //      bottomNavigationBar: CurvedNavigationBar(
 //        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 //        buttonBackgroundColor: Theme.of(context).accentColor,
@@ -166,73 +166,73 @@ class _TabsWidgetState extends State<TabsWidget> {
 //          ),
 //        ],
 //      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).accentColor,
-        selectedFontSize: 0,
-        unselectedFontSize: 0,
-        iconSize: 22,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        selectedIconTheme: IconThemeData(size: 25),
-        unselectedItemColor: Theme.of(context).hintColor.withOpacity(1),
-        currentIndex: widget.selectedTab,
-        onTap: (int i) {
-          this._selectTab(i);
-        },
-        // this will be set when a new tab is tapped
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(UiIcons.bell),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UiIcons.heart),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-              title: new Container(height: 5.0),
-              icon: Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Theme.of(context).accentColor.withOpacity(0.4),
-                        blurRadius: 40,
-                        offset: Offset(0, 15)),
-                    BoxShadow(
-                        color: Theme.of(context).accentColor.withOpacity(0.4),
-                        blurRadius: 13,
-                        offset: Offset(0, 3))
-                  ],
-                ),
-                child: new Icon(UiIcons.home,
-                    color: Theme.of(context).primaryColor),
-              )),
-          BottomNavigationBarItem(
-            icon: new Icon(UiIcons.chat),
-            title: new Container(height: 0.0),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(UiIcons.user_1),
-            title: new Container(height: 0.0),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.asset('img/chatbot.jpg')),
-        onPressed: () {
-          Navigator.of(context).pushNamed(ChatBot.routeName);
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+//       bottomNavigationBar: BottomNavigationBar(
+//         type: BottomNavigationBarType.fixed,
+//         selectedItemColor: Theme.of(context).accentColor,
+//         selectedFontSize: 0,
+//         unselectedFontSize: 0,
+//         iconSize: 22,
+//         elevation: 0,
+//         backgroundColor: Colors.transparent,
+//         selectedIconTheme: IconThemeData(size: 25),
+//         unselectedItemColor: Theme.of(context).hintColor.withOpacity(1),
+//         currentIndex: widget.selectedTab,
+//         onTap: (int i) {
+//           this._selectTab(i);
+//         },
+//         // this will be set when a new tab is tapped
+//         items: [
+//           BottomNavigationBarItem(
+//             icon: Icon(UiIcons.bell),
+//             title: new Container(height: 0.0),
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(UiIcons.heart),
+//             title: new Container(height: 0.0),
+//           ),
+//           BottomNavigationBarItem(
+//               title: new Container(height: 5.0),
+//               icon: Container(
+//                 width: 45,
+//                 height: 45,
+//                 decoration: BoxDecoration(
+//                   color: Theme.of(context).accentColor,
+//                   borderRadius: BorderRadius.all(
+//                     Radius.circular(50),
+//                   ),
+//                   boxShadow: [
+//                     BoxShadow(
+//                         color: Theme.of(context).accentColor.withOpacity(0.4),
+//                         blurRadius: 40,
+//                         offset: Offset(0, 15)),
+//                     BoxShadow(
+//                         color: Theme.of(context).accentColor.withOpacity(0.4),
+//                         blurRadius: 13,
+//                         offset: Offset(0, 3))
+//                   ],
+//                 ),
+//                 child: new Icon(UiIcons.home,
+//                     color: Theme.of(context).primaryColor),
+//               )),
+//           BottomNavigationBarItem(
+//             icon: new Icon(UiIcons.chat),
+//             title: new Container(height: 0.0),
+//           ),
+//           BottomNavigationBarItem(
+//             icon: new Icon(UiIcons.user_1),
+//             title: new Container(height: 0.0),
+//           ),
+//         ],
+//       ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: ClipRRect(
+      //       borderRadius: BorderRadius.circular(50),
+      //       child: Image.asset('img/chatbot.jpg')),
+      //   onPressed: () {
+      //     Navigator.of(context).pushNamed(ChatBot.routeName);
+      //   },
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
   }
 }

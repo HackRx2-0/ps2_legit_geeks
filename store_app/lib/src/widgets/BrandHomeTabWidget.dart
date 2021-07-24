@@ -1,13 +1,13 @@
 import '../../config/ui_icons.dart';
 import '../models/brand.dart';
-import '../models/product.dart';
+import '../models/product.dart' as product;
 import '../widgets/FlashSalesCarouselWidget.dart';
 import '../widgets/HomeSliderWidget.dart';
 import 'package:flutter/material.dart';
 
 class BrandHomeTabWidget extends StatefulWidget {
   Brand brand;
-  ProductsList _productsList = new ProductsList();
+  product.ProductsList _productsList = new product.ProductsList();
 
   BrandHomeTabWidget({this.brand});
 

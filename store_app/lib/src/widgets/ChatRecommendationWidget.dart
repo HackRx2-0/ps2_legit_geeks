@@ -6,6 +6,8 @@ import 'package:store_app/src/models/product.dart';
 import 'package:store_app/src/widgets/RecommendedCarouselItemWidget.dart';
 
 class PopupProductsWidget extends StatefulWidget {
+  final List<Product> products;
+  PopupProductsWidget({this.products});
   @override
   _PopupProductsWidgetState createState() => _PopupProductsWidgetState();
 }
@@ -24,7 +26,6 @@ class _PopupProductsWidgetState extends State<PopupProductsWidget> {
     topLeft: Radius.circular(15),
     bottomLeft: Radius.circular(15),
   );
-  ProductsList _productsList = new ProductsList();
   Widget _switcherWidget;
 
   @override
@@ -47,11 +48,10 @@ class _PopupProductsWidgetState extends State<PopupProductsWidget> {
               child: ListView.separated(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: _productsList.flashSalesList.length,
+                itemCount: widget.products.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  Product product =
-                      _productsList.flashSalesList.elementAt(index);
+                  Product product = widget.products.elementAt(index);
                   return RecommendedCarouselItemWidget(
                     product: product,
                     heroTag: 'flash_sales',
@@ -78,6 +78,7 @@ class _PopupProductsWidgetState extends State<PopupProductsWidget> {
   @override
   Widget build(BuildContext context) {
     print("bool value of close: " + _close.toString());
+    print(widget.products);
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.topRight,
@@ -162,11 +163,11 @@ class _PopupProductsWidgetState extends State<PopupProductsWidget> {
                             child: ListView.separated(
                               shrinkWrap: true,
                               primary: false,
-                              itemCount: _productsList.flashSalesList.length,
+                              itemCount: widget.products.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
-                                Product product = _productsList.flashSalesList
-                                    .elementAt(index);
+                                Product product =
+                                    widget.products.elementAt(index);
                                 return RecommendedCarouselItemWidget(
                                   product: product,
                                   heroTag: 'flash_sales',

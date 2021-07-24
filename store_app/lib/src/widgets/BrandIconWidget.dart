@@ -1,6 +1,7 @@
 import '../models/brand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BrandIconWidget extends StatefulWidget {
   Brand brand;
@@ -49,16 +50,23 @@ class _BrandIconWidgetState extends State<BrandIconWidget>
         child: Row(
           children: <Widget>[
             Hero(
-              tag: widget.heroTag + widget.brand.id,
-              child: SvgPicture.asset(
-                widget.brand.logo,
-                color: widget.brand.selected
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).primaryColor,
-                width: 50,
-//                height: 18,
-              ),
-            ),
+                tag: widget.heroTag + widget.brand.id,
+                child: CachedNetworkImage(
+                  imageUrl: widget.brand.image,
+                  width: 50,
+                  color: widget.brand.selected
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).primaryColor,
+                )
+//               SvgPicture.asset(
+//                 widget.brand.logo,
+//                 color: widget.brand.selected
+//                     ? Theme.of(context).accentColor
+//                     : Theme.of(context).primaryColor,
+//                 width: 50,
+// //                height: 18,
+//               ),
+                ),
             SizedBox(width: 10),
             AnimatedSize(
               duration: Duration(milliseconds: 350),
@@ -72,7 +80,9 @@ class _BrandIconWidgetState extends State<BrandIconWidget>
                     size: widget.brand.selected ? 18 : 0,
                   ),
                   Text(
-                    widget.brand.selected ? widget.brand.rate.toString() : '',
+                    widget.brand.selected
+                        ? widget.brand.averageRating.toStringAsFixed(2)
+                        : '',
                     style: Theme.of(context).textTheme.body2,
                   )
                 ],

@@ -27,6 +27,8 @@ class Brand {
     this.selected = false;
     this.productCount = json['products_count'];
     this.averageRating = json['average_rating'];
+    this.image = json['image'];
+
     this.color = Color(0xff48D1CC);
     if (json['products'] != null) {
       this.products = [];

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/config/ui_icons.dart';
+import 'package:store_app/provider/base_view.dart';
+import 'package:store_app/src/models/route_argument.dart';
 import 'package:store_app/src/screens/group_cart_page.dart';
+import 'package:store_app/view/group_info_viewmodel.dart';
 
 import 'group_wish_list.dart';
 
 class GroupInfo extends StatefulWidget {
+  static const routeName = '/groupInfo';
+  final RouteArgument routeArgument;
+  GroupInfo({this.routeArgument});
   @override
   _GroupInfoState createState() => _GroupInfoState();
 }
@@ -54,89 +60,95 @@ class _GroupInfoState extends State<GroupInfo> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: ListView(
-        children: [
-          Stack(
+      body: BaseView<GroupInfoViewModel>(
+        // onModelReady: ,
+        builder: (ctx, model, child) {
+          return ListView(
             children: [
-              Container(
-                child: groupIcon,
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.35,
+              Stack(
+                children: [
+                  Container(
+                    child: groupIcon,
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.35,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      "${groupName}",
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.headline,
+                    ),
+                  )
+                ],
               ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.35,
-                alignment: Alignment.bottomLeft,
-                padding: EdgeInsets.all(15.0),
-                child: Text(
-                  "${groupName}",
-                  maxLines: 2,
-                  style: Theme.of(context).textTheme.headline,
-                ),
-              )
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.all(15.0),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Description",
-                  style: Theme.of(context).textTheme.body2,
-                ),
-                Text(
-                  "${description}",
-                  style: Theme.of(context).textTheme.body1,
-                  maxLines: 2,
-                ),
-              ],
-            ),
-          ),
-          Column(
-            children: [
               Container(
                 padding: EdgeInsets.all(15.0),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Group Members",
-                        style: Theme.of(context).textTheme.body2,
-                      ),
+                    Text(
+                      "Description",
+                      style: Theme.of(context).textTheme.body2,
                     ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: CircleAvatar(
-                                child: Image.network(
-                                    "https://www.divinesolitaires.com/upload/images/slug-master/jklmn07083png.png")),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              child: Text(
-                                "Add Participants",
-                                style: Theme.of(context).textTheme.body2,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                    Text(
+                      "${description}",
+                      style: Theme.of(context).textTheme.body1,
+                      maxLines: 2,
                     ),
-                    for (int i = 0; i < members.length; i++) memberContainer(i),
                   ],
                 ),
               ),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(15.0),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Group Members",
+                            style: Theme.of(context).textTheme.body2,
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: CircleAvatar(
+                                    child: Image.network(
+                                        "https://www.divinesolitaires.com/upload/images/slug-master/jklmn07083png.png")),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  child: Text(
+                                    "Add Participants",
+                                    style: Theme.of(context).textTheme.body2,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        for (int i = 0; i < members.length; i++)
+                          memberContainer(i),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
+          );
+        },
       ),
     );
   }

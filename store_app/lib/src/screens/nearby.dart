@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/enum/view_state.dart';
+import 'package:store_app/provider/base_view.dart';
+import 'package:store_app/src/models/nearbyPeople.dart';
+import 'package:store_app/view/nearbyViewModel.dart';
 
 class Nearby extends StatefulWidget {
   const Nearby({key}) : super(key: key);
@@ -39,7 +43,7 @@ class _NearbyState extends State<Nearby> {
         child: Container(
           alignment: Alignment.center,
           height: 35.0,
-          width: 1.2*MediaQuery.of(context).size.width/3,
+          width: 1.2 * MediaQuery.of(context).size.width / 3,
           decoration: BoxDecoration(
             color: index == optionIndex ? Colors.blue : Colors.black,
             borderRadius: BorderRadius.circular(18.0),
@@ -58,82 +62,50 @@ class _NearbyState extends State<Nearby> {
   }
 
   Widget peopleNearby() {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.all(15.0),
-          alignment: Alignment.bottomLeft,
-          child: Text(
-            "People Nearby",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        Visible(),
-        ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          shrinkWrap: true,
-          primary: false,
-          itemCount: nearbyPeople.length,
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 7);
-          },
-          itemBuilder: (context, index) {
-            return nearby(index);
-          },
-        ),
-      ],
+    return BaseView<NearbyViewModel>(
+      onModelReady: (model) => model.getNearbyPeople(context),
+      builder: (ctx, model, child) => model.state == ViewState.Busy
+          ? Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 150.0,
+              ),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(15.0),
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    "People Nearby",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Visible(),
+                ListView.separated(
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: model.nearbyPeopleList.length,
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 7);
+                  },
+                  itemBuilder: (context, index) {
+                    var person = model.nearbyPeopleList[index];
+                    return nearby(person);
+                  },
+                ),
+              ],
+            ),
     );
   }
 
-  List<Map<dynamic, dynamic>> nearbyPeople = [
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    },
-    {
-      "name": "Saksham Mittal",
-      "distance": 570,
-      "image":
-          "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
-    }
-  ];
-
-  Widget nearby(int index) {
+  Widget nearby(NearbyPeople person) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
       child: Row(
@@ -145,8 +117,9 @@ class _NearbyState extends State<Nearby> {
                 width: 60,
                 height: 60,
                 child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(optionIndex == 0 ? "${nearbyPeople[index]["image"]}" : "${nearbyGroups[index]["image"]}"),
+                  backgroundImage: NetworkImage(optionIndex == 0
+                      ? "${person.profile_pic}"
+                      : "${nearbyGroups[0]["image"]}"),
                 ),
               ),
             ],
@@ -158,7 +131,9 @@ class _NearbyState extends State<Nearby> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Text(
-                  optionIndex == 0 ? "${nearbyPeople[index]["name"]}":"${nearbyGroups[index]["name"]}",
+                  optionIndex == 0
+                      ? "${person.first_name + " " + person.last_name}"
+                      : "${nearbyGroups[0]["name"]}",
                   overflow: TextOverflow.fade,
                   softWrap: false,
                   style: Theme.of(context).textTheme.body2,
@@ -168,7 +143,7 @@ class _NearbyState extends State<Nearby> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        "${optionIndex == 0 ? nearbyPeople[index]["distance"] : nearbyGroups[index]["distance"]} m away in Delhi NCR",
+                        "${optionIndex == 0 ? person.distance.toStringAsFixed(1) : nearbyGroups[0]["distance"]} m away in Delhi NCR",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: Theme.of(context)
@@ -251,7 +226,7 @@ class _NearbyState extends State<Nearby> {
             return SizedBox(height: 7);
           },
           itemBuilder: (context, index) {
-            return nearby(index);
+            return nearby(NearbyPeople());
           },
         ),
       ],
@@ -263,7 +238,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 1",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -272,7 +253,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 2",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -281,7 +268,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 3",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -290,7 +283,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 4",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -299,7 +298,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 5",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -308,7 +313,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 6",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"
@@ -317,7 +328,13 @@ class _NearbyState extends State<Nearby> {
       "name": "Group 7",
       "distance": 570,
       "members": [
-        "member1", "member2", "member3", "member4", "member1", "member2", "member3"
+        "member1",
+        "member2",
+        "member3",
+        "member4",
+        "member1",
+        "member2",
+        "member3"
       ],
       "image":
           "https://assets.entrepreneur.com/content/3x2/2000/20150820205507-single-man-outdoors-happy-bliss.jpeg"

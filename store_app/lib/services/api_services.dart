@@ -80,6 +80,34 @@ class ApiService extends BaseApi {
     return response;
   }
 
+  //groupchatviewmodel
+  Future<ApiResponse> getGroupChat() async {
+    ApiResponse response;
+    try {
+      response = await getRequest(
+        endpoint: groupChats,
+      );
+      print(response.data);
+    } catch (e) {
+      response = ApiResponse(error: true, errorMessage: e.toString());
+    }
+    return response;
+  }
+
+  //nearbyviewmodel
+  Future<ApiResponse> getNearbyPeople() async {
+    ApiResponse response;
+    try {
+      response = await getRequest(
+        endpoint: nearbyPeople,
+      );
+      print(response.data);
+    } catch (e) {
+      response = ApiResponse(error: true, errorMessage: e.toString());
+    }
+    return response;
+  }
+
   Future<ApiResponse> getProducts() async {
     ApiResponse response;
     try {
@@ -165,6 +193,42 @@ class ApiService extends BaseApi {
     ApiResponse response;
     try {
       response = await deleteRequest(endpoint: endpoint, id: id);
+      print('no error');
+    } catch (e) {
+      response = ApiResponse(error: true, errorMessage: e.toString());
+    }
+    return response;
+  }
+
+  //chatviewmodel
+  Future<ApiResponse> fetchChats({String id}) async {
+    ApiResponse response;
+    try {
+      response = await getRequest(endpoint: groupChat + '$id/chats/');
+      print('no error');
+    } catch (e) {
+      response = ApiResponse(error: true, errorMessage: e.toString());
+    }
+    return response;
+  }
+
+  //Groupinfoviewmodel
+  Future<ApiResponse> fetchGroupInfo({String id}) async {
+    ApiResponse response;
+    try {
+      response = await getRequest(endpoint: groupInfo + '$id/');
+      print('no error');
+    } catch (e) {
+      response = ApiResponse(error: true, errorMessage: e.toString());
+    }
+    return response;
+  }
+
+  //productDetails
+  Future<ApiResponse> fetchProdyuct({String id}) async {
+    ApiResponse response;
+    try {
+      response = await getRequest(endpoint: products + '$id/');
       print('no error');
     } catch (e) {
       response = ApiResponse(error: true, errorMessage: e.toString());

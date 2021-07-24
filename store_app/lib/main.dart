@@ -1,8 +1,17 @@
+import 'package:store_app/config/app_config.dart' as config;
+import 'package:store_app/provider/getit.dart';
+import 'package:store_app/route_generator.dart';
+import 'package:store_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
-import './config/app_config.dart' as config;
+import 'package:store_app/services/notification_service.dart';
+import 'package:store_app/view/home_viewmodel.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
+  // await NotificationService().init();
+  // final homeViewModel = getIt.get<HomeViewModel>();
+  // homeViewModel.fetchFlashSaleProducts();
   runApp(MyApp());
 }
 
@@ -11,8 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Doorstep Delhi',
+      navigatorKey: getIt<NavigationService>().navigatorKey,
+      title: 'Store App',
       initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData(
         fontFamily: 'Poppins',
